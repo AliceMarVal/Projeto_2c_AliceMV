@@ -7,6 +7,10 @@
 #define arv_tam 100
 #define stack_tam 100
 
+typedef struct{
+    char producoes[2];
+} Producoes;
+
 char w[16];
 char output[2];
 int  len = 0;
@@ -14,6 +18,8 @@ int c1 = 0;
 int c2 = 0;
 int c3 = 0;
 int c4 = 0;
+
+
 
 
 char stack[stack_tam];
@@ -439,7 +445,9 @@ void go_to(char s){
 
 int main() {
     FILE *file;
+    int cont = 0;
     char arv[arv_tam];
+    Producoes p[15];
 
     // Open file
     file = fopen("./input.txt", "r");
@@ -455,10 +463,10 @@ int main() {
 
 //inicializa a pilha
 
-    push('S');
-
-    push('0');
     while(!feof(file)){
+        cont = 0; 
+        push('S');
+        push('0');
         fscanf(file, "%s", w);
         for(int i = 0; i < strlen(w);i++){
 
@@ -480,6 +488,10 @@ int main() {
             else{
                 printf("|  %c %c  \n",output[0],output[1]);
             }
+            p[cont].producoes[0] = output[0];
+            p[cont].producoes[1] = output[1];
+            ++cont;
+        //d2| p2
             if(output[0] == 'S'){
                 push(w[i]);
                 push(output[0]);
@@ -501,11 +513,35 @@ int main() {
                 break;
             }
         }
-        for(int j = 0; j <= top; j++){
+        for(int i = -1; i <= top; i++){
             pop();
         }
-        push('S');
+        arv[0] = 'S';
 
-        push('0');
+    for(int j=0; j<cont; j++){
+        //armazena na arvore aSb
+        if(p[j].producoes[0] == 'p' && p[j].producoes[1] == '1'){
+            arv[3*j+1] = 'a';
+            arv[3*j+2] = 'S';
+            arv[3*j+3] = 'b';
+        } else if(p[j].producoes[0] == 'p' && p[j].producoes[1] == '2'){ //armazena o c, ultima folha da arvores
+            arv[3*j+1] = 'c';
+        }
+    }
+
+    //print da arvore
+    printf("\n\n=== ARVORE DE ANALISE SINTATICA ===\n\n");
+
+    printf("   %c   ", arv[0]); printf("\n / | \\"); //imprime a raiz
+
+    for(int j=0; j<cont; j++){
+        if(arv[3*j+1] == 'c'){
+            printf("\n   %c   ", arv[3*j+1]); //imprime a ultima folha
+        }else{
+            printf("\n%c  %c  %c", arv[3*j+1], arv[3*j+2], arv[3*j+3]); printf("\n / | \\"); //imprime as demais folhas
+        }
+    }
+    printf("\n\n");
+        
     }
 }
