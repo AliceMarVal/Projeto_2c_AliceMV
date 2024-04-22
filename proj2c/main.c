@@ -442,7 +442,7 @@ int main() {
     char arv[arv_tam];
 
     // Open file
-    file = fopen("../input.txt", "r");
+    file = fopen("./input.txt", "r");
     if (file == NULL) {
         printf("erro ao abrir o arquivo\n");
         return 1;
